@@ -305,10 +305,6 @@ const HealthDashboard = () => {
     setOpen(false);
   };
 
-  if (loading) {
-    return <Typography>Loading...</Typography>;
-  }
-
   return (
     <Box sx={{ padding: 2, borderRadius: 2, marginBottom: 3, backgroundColor: themeMode === "light" ? "white" : "black", color: themeMode === "light" ? "black" : "white" }}>
       <Button
