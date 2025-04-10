@@ -116,6 +116,16 @@ const HealthDashboard = () => {
       return;
     }
 
+    const getMetricStatus = (value, thresolds) => {
+      if (value < thresholds.good[0] || value > thresholds.good[1]) {
+        return "Error";
+      }
+      if (value >= thresholds.warning[0] && value <= thresholds.warning[1]) {
+        return "Warning";
+      }
+      return "Good";
+    };
+
     const metricValueNumber = Number(metricValue);
     let initialStatus = "Good";
     const Value = `${metricValue} units`; // Ensure this is always a valid number
