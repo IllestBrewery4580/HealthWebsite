@@ -24,11 +24,11 @@ const mergeDynamicMetrics = (fetchedMetrics, dynamicMetrics) => {
 const HealthDashboard = () => {
   // Initialize initialValue before it's used
   const initialThresholds = {
-    heartRate: { good: [60, 100], warning: [101, 120], critical: [120, Infinity] },
-    bloodPressure: { good: [90, 120], warning: [121, 140], critical:  [141, Infinity] },
-    oxygenSaturation: { good: [95, 100], warning: [91, 94], critical: [0, 90] },
-    temperature: { good: [36.1, 37.2], warning: [37.3, 38.0], critical: [38.1, Infinity] },
-    bloodGlucose: { good: [70, 100], warning: [101, 125], critical: [126, Infinity] }
+    foundry: {},
+    blender: {},
+    kafka: {},
+    analytic: {},
+    sentential: {},
   }; // Or whatever default value you want for thresholds
 
   const [healthData, setHealthData] = useState({ Metrics: [] });
