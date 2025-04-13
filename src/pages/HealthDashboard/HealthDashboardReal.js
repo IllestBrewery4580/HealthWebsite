@@ -48,15 +48,10 @@ const HealthDashboard = () => {
   const [metric, setMetric] = useState([]);
   const [metricValue, setMetricValue] = useState("");
   const [fetchedData, setFetchedData] = useState(null);
-  const [currentThresholds, setCurrentThresholds] = useState({
+  const [defaultThresholds, setDefaultThresholds] = useState({
     cpuUsage: { good: [0, 20], warning: [21, 40] },
     memoryUsage: { good: [30, 70], warning: [71,85] },
   });
-  
-  const defaultThresholds = {
-    heartRate: { good: [60, 100], warning: [101, 120] },
-    bloodPressure: { good: [90, 120], warning: [121, 140] },
-  };
 
   if (healthData.Metrics.some(metric => metric.Status === "Error")) {
     overallHealth.status = "Critical";
@@ -221,7 +216,7 @@ const HealthDashboard = () => {
       // Check blood pressure thresholds
       if (metric.Name === "Memory Usage") {
         const value = Number(metric.Value.split(" ")[0]); // Get the numeric value of blood pressure
-        const thresholds = currentThresholds.memoryUsage;
+        const thresholds = defaultThresholds.memoryUsage;
 
         if (value >= thresholds.warning[0] && value <= thresholds.warning[1]) {
           return { ...metric, Status: "Warning" };
