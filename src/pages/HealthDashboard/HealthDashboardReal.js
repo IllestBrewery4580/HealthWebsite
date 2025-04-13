@@ -48,6 +48,10 @@ const HealthDashboard = () => {
   const [metric, setMetric] = useState([]);
   const [metricValue, setMetricValue] = useState("");
   const [fetchedData, setFetchedData] = useState(null);
+  const [currentThresholds, setCurrentThresholds] = useState({
+    cpuUsage: { good: [0, 20], warning: [21, 40] },
+    memoryUsage: { good: [30, 70], warning: [71,85] },
+  });
   
   const defaultThresholds = {
     heartRate: { good: [60, 100], warning: [101, 120] },
@@ -72,20 +76,20 @@ const HealthDashboard = () => {
     }
 
     switch (activityState) {
-      case "Resting":
+      case "Idle":
         return {
-          heartRate: { good: [60, 100], warning: [101, 120] },
-          bloodPressure: { good: [90, 120], warning: [121, 140] }
+          cpuUsage: { good: [0, 20], warning: [21, 40] },
+          memoryUsage: { good: [30, 70], warning: [71, 85] },
         };
-      case "Exercising":
+      case "Normal":
         return {
-          heartRate: { good: [100, 180], warning: [181, 200] },
-          bloodPressure: { good: [110, 150], warning: [151, 170] }
+          cpuUsage: { good: [20, 60], warning: [61, 80] },
+          memoryUsage: { good: [30, 70], warning: [71, 85] }
         };
-      case "Sleeping":
+      case "High Load":
         return {
-          heartRate: { good: [50, 70], warning: [71, 90] },
-          bloodPressure: { good: [80, 110], warning: [111, 130] }
+          cpuUsage: { good: [60, 85], warning: [86, 95] },
+          memoryUsage: { good: [70, 98], warning: [91, 98] }
         };
       default:
         return defaultThresholds;
@@ -215,11 +219,13 @@ const HealthDashboard = () => {
       }
 
       // Check blood pressure thresholds
-      if (metric.Name === "Blood Pressure") {
+      if (metric.Name === "Memory Usage") {
         const value = Number(metric.Value.split(" ")[0]); // Get the numeric value of blood pressure
-        if (value >= thresholds.bloodPressure.warning[0] && value <= thresholds.bloodPressure.warning[1]) {
+        const thresholds = currentThresholds.memoryUsage;
+
+        if (value >= thresholds.warning[0] && value <= thresholds.warning[1]) {
           return { ...metric, Status: "Warning" };
-        } else if (value < thresholds.bloodPressure.good[0] || value > thresholds.bloodPressure.good[1]) {
+        } else if (value < thresholds.good[0] || value > thresholds.good[1]) {
           return { ...metric, Status: "Error" };
         }
         return { ...metric, Status: "Good" };
@@ -288,7 +294,7 @@ const HealthDashboard = () => {
         const response = await axios.get(API_ENDPOINT);
         const transformedData = response.data.map(item => ({
           Name: item.component, // Map 'component' to 'Name'
-          Status: item.health, // Map 'health' to 'Status'
+          Status: item.status, // Map 'health' to 'Status'
           Value: `${item.value} ${item.unit}`, // Adding unit for consistency
           Reason: item.reason || 'No reason specified', // Ensure 'reason' is added correctly
         }));
@@ -301,7 +307,7 @@ const HealthDashboard = () => {
     };      
       
     fetchData(); // Call fetchData on component mount  
-  }, []); // Add dynamicMetrics as a dependency  
+  }, [dynamicMetrics]); // Add dynamicMetrics as a dependency  
 
   useEffect(() => {
     document.body.style.backgroundColor = themeMode === "light" ? "white" : "black";
