@@ -39,7 +39,7 @@ const HealthDashboard = () => {
   const [newMetricGoodThreshold, setNewMetricGoodThreshold] = useState("");
   const [newMetricWarningThreshold, setNewMetricWarningThreshold] = useState("");
   const [dynamicMetrics, setDynamicMetrics] = useState([]);
-  const [open, setOpen] = useState(false); // FOr handling the form dialog
+  const [open, setOpen] = useState(false); // For handling the form dialog
   const [editMode, setEditMode] = useState(false); // New state for edit mode
   const [overallHealth, setOverallHealth] = useState({ status: "Good", color: "green" });
   const [thresholds, setThresholds] = useState(initialThresholds);
